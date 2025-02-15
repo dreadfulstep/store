@@ -16,7 +16,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-surface-a0`}>{children}</body>
+      <body className={`${inter.className} bg-surface-a0`}>
+        <div className="absolute top-16 left-10 w-24 h-24 bg-primary-a10 blur-[80px] opacity-70 z-50"></div>
+        <div className="absolute bottom-10 right-10 w-32 h-32 bg-primary-a30 blur-[100px] opacity-50 z-40"></div>
+        {children}
+      </body>
     </html>
   )
 }
