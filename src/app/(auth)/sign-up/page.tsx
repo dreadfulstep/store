@@ -167,9 +167,11 @@ const SignUp = () => {
 
         <p className="mt-6 text-center text-sm text-gray-400">
           Already have an account?{" "}
-          <Button variant="link" href="/login">
-            Sign in
-          </Button>
+          <div className="w-full flex justify-center">
+            <Button variant="link" href="/login" >
+              Sign in
+            </Button>
+          </div>
         </p>
       </motion.div>
     </div>

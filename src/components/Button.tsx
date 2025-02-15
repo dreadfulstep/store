@@ -34,7 +34,11 @@ const Button: React.FC<ButtonProps> = ({
 
   if (href) {
     return (
-      <a href={href} className={combinedClassName} {...props}>
+      <a
+        href={href}
+        className={`${combinedClassName} ${className && className.includes('w-full') ? '' : ''}`} 
+        {...props}
+      >
         {Icon && <Icon size={20} />}
         {children}
       </a>

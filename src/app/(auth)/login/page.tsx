@@ -3,8 +3,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Mail, Lock, ArrowLeft, Github, Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
 import Button from "@/components/Button";
+import { Input } from "@/components/Input";
 
 const Login = () => {
   const router = useRouter();
@@ -59,40 +59,34 @@ const Login = () => {
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-sm text-gray-400 mb-1">Email Address</label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-3 text-gray-500" size={18} />
-              <input
-                type="email"
-                name="email"
-                className="w-full pl-10 pr-4 py-2 rounded-lg border bg-surface-a20 text-light-a0 border-surface-a10 focus:border-primary-a50 focus:outline-none"
-                placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                autoComplete="email"
-                required
-              />
-            </div>
+            <p className="text-sm text-gray-400 mb-1">Email Address</p>
+            <Input
+              icon={<Mail size={18} />}
+              type="email"
+              name="email"
+              autoComplete="email"
+              placeholder="name@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full rounded-lg border bg-surface-a20 text-light-a0 border-surface-a10 focus:border-primary-a50 focus:outline-none"
+            />
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm text-gray-400 mb-1">Password</label>
+            <p className="text-sm text-gray-400 mb-1">Password</p>
             <div className="relative">
-              <Lock className="absolute left-3 top-3 text-gray-500" size={18} />
-              <motion.input
-                ref={passwordInputRef}
+              <Input
+                icon={<Lock size={18} />}
                 type={showPassword ? "text" : "password"}
                 name="password"
-                className="w-full pl-10 pr-12 py-2 rounded-lg border bg-surface-a20 text-gray-400 border-surface-a10 focus:border-primary-a50 focus:outline-none"
+                autoComplete="current-password"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                autoComplete="current-password"
+                ref={passwordInputRef}
                 required
-                style={{
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "#6d7280",
-                }}
+                className="w-full pl-10 pr-12 py-2 rounded-lg border bg-surface-a20 text-light-a0 border-surface-a10 focus:border-primary-a50 focus:outline-none"
               />
               <div
                 onClick={togglePasswordVisibility}
@@ -137,9 +131,11 @@ const Login = () => {
 
         <p className="mt-6 text-center text-sm text-gray-400">
           Don&apos;t have an account?{" "}
-          <Button variant="link" href="/sign-up">
-            Sign up
-          </Button>
+          <div className="w-full flex justify-center">
+            <Button variant="link" href="/login" >
+              Sign up
+            </Button>
+          </div>
         </p>
       </div>
     </div>
