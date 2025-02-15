@@ -3,6 +3,7 @@
 import React from "react";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Button from "@/components/Button";
 
 const Hero = () => {
   const router = useRouter();
@@ -25,18 +26,20 @@ const Hero = () => {
         </h1>
 
         <div className="flex flex-col sm:flex-row justify-center gap-6">
-          <button
+          <Button
             onClick={handleGetStarted}
-            className="bg-primary-a50/10 border border-primary-a10/60 hover:bg-primary-a40/20 text-light-a0 py-2 px-6 rounded-lg text-lg font-semibold transition max-w-xs w-fit mx-auto sm:mx-0"
+            variant="primary"
+            className="max-w-xs w-fit mx-auto sm:mx-0"
           >
             Get Started <ArrowRight size={20} className="inline ml-2" />
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={handleExplore}
-            className="border border-primary-a50/60 bg-primary-a40/10 hover:bg-primary-a50/20 text-neutral-200 py-2 px-6 rounded-lg text-lg font-semibold transition max-w-xs w-fit mx-auto sm:mx-0"
+            variant="secondary"
+            className="max-w-xs w-fit mx-auto sm:mx-0"
           >
             Explore
-          </button>
+          </Button>
         </div>
       </div>
     </section>
