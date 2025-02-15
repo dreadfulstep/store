@@ -67,14 +67,14 @@ const ForgotPassword = () => {
           </Button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-400">
+        <div className="mt-6 text-center text-sm text-gray-400">
           Remember your password?
           <div className="w-full flex justify-center">
             <Button variant="link" href="/login" >
               Sign in
             </Button>
           </div>
-        </p>
+        </div>
       </div>
     </div>
   );

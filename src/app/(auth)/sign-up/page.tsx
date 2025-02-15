@@ -6,6 +6,7 @@ import { Github, ArrowRight, User, Mail, Lock, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Button from "@/components/Button";
 import { Input } from "@/components/Input";
+import Turnstile from "react-turnstile";
 
 const SignUp = () => {
   const router = useRouter();
@@ -14,6 +15,8 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false); // Control the modal visibility
 
   const fullNameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -44,6 +47,9 @@ const SignUp = () => {
     } else if (step === 2) {
       setStep(3);
       setTimeout(() => passwordRef.current?.focus(), 50);
+    } else if (step === 3) {
+      // Open the modal to show the CAPTCHA
+      setIsModalOpen(true);
     }
   };
 
@@ -53,6 +59,38 @@ const SignUp = () => {
     } else if (e.shiftKey && e.key === "Enter") {
       if (step > 1) setStep((prev) => prev - 1);
     }
+  };
+
+  const handleSubmit = async () => {
+    if (!turnstileToken) {
+      setError("Please complete the security check.");
+      return;
+    }
+
+    const res = await fetch("/api/account/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fullName,
+        email,
+        password,
+        turnstileToken,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      router.push("/login");
+    } else {
+      setError(data.message || "Account creation failed.");
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false); // Close the modal after CAPTCHA is completed
   };
 
   return (
@@ -148,7 +186,7 @@ const SignUp = () => {
           variant="primary"
           className="mt-4 w-full"
         >
-          {step < 3 ? <>Continue <ArrowRight size={18} /></> : "Create Account"}
+          {step < 3 ? <>Continue <ArrowRight size={18} /></> : "Complete Sign Up"}
         </Button>
 
         <div className="my-6 flex items-center gap-2">
@@ -165,15 +203,31 @@ const SignUp = () => {
           <Github size={18} /> Sign up with GitHub
         </Button>
 
-        <p className="mt-6 text-center text-sm text-gray-400">
+        <div className="mt-6 text-center text-sm text-gray-400">
           Already have an account?{" "}
           <div className="w-full flex justify-center">
-            <Button variant="link" href="/login" >
+            <Button variant="link" href="/login">
               Sign in
             </Button>
           </div>
-        </p>
+        </div>
       </motion.div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
+          <div className="bg-surface-a0 border border-primary-a0/60 p-6 rounded-lg w-96 max-w-full">
+            <h2 className="text-xl font-semibold mb-4">Please Complete the CAPTCHA</h2>
+            <Turnstile
+              sitekey={process.env.NEXT_PUBLIC_CLOUDFLARE_SITE_KEY!}
+              onVerify={(token) => {
+                setTurnstileToken(token);
+                handleSubmit();
+                closeModal();
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
