@@ -25,6 +25,11 @@ export default {
           a30: 'rgba(var(--primary-a30))',
           a40: 'rgba(var(--primary-a40))',
           a50: 'rgba(var(--primary-a50))',
+          a60: 'rgba(var(--primary-a60))',
+          a70: 'rgba(var(--primary-a70))',
+          a80: 'rgba(var(--primary-a80))',
+          a90: 'rgba(var(--primary-a90))',
+          a100: 'rgba(var(--primary-a100))',
         },
 
         /** Surface colors */

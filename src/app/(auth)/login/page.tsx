@@ -1,191 +1,146 @@
 "use client";
 
-import React, { useState, useRef } from "react";
-import { motion } from "framer-motion";
-import { nanoid } from "nanoid";
-import { Github, ArrowRight, User, Mail, Lock, ArrowLeft } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Mail, Lock, ArrowLeft, Github, Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
-const SignUp = () => {
+const Login = () => {
   const router = useRouter();
-  const [step, setStep] = useState(1);
-  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
 
-  const fullNameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-
-  const generateUsername = (name: string) => {
-    return name.toLowerCase().replace(/\s/g, "") + nanoid(4);
-  };
-
-  const validateAndProceed = () => {
-    setError("");
-
-    if (step === 1 && !fullName.trim()) {
-      setError("Please enter your full name.");
-      fullNameRef.current?.focus();
+  // Handle submit
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim() || !password.trim()) {
+      setError("Please fill in both fields.");
       return;
     }
-    if (step === 2 && !email.trim()) {
-      setError("Please enter a valid email address.");
-      emailRef.current?.focus();
-      return;
-    }
-    if (step === 3 && password.length < 6) {
-      setError("Password must be at least 6 characters long.");
-      passwordRef.current?.focus();
-      return;
-    }
-
-    if (step === 1) {
-      setUsername(generateUsername(fullName));
-      setStep(2);
-      setTimeout(() => emailRef.current?.focus(), 50);
-    } else if (step === 2) {
-      setStep(3);
-      setTimeout(() => passwordRef.current?.focus(), 50);
-    }
+    console.log("Logging in with:", { email, password });
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      validateAndProceed();
-    } else if (e.shiftKey && e.key === "Enter") {
-      if (step > 1) setStep((prev) => prev - 1);
-    }
+  // Toggle password visibility
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
+
+  // Check for autofill and update the state accordingly
+  useEffect(() => {
+    const checkAutoFill = () => {
+      if (passwordInputRef.current?.value) {
+        setPassword(passwordInputRef.current?.value);
+      }
+    };
+
+    // Set a small timeout to check if autofill happens after render
+    const timer = setTimeout(checkAutoFill, 500);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-surface-a0 relative">
-      {/* Back to Home Button */}
-      <button
+    <div className="flex min-h-screen items-center justify-center bg-surface-a0">
+      <div
+        className="absolute top-6 left-6 text-gray-400 hover:text-light-a0 cursor-pointer flex items-center gap-2"
         onClick={() => router.push("/")}
-        className="absolute top-6 left-6 flex items-center gap-2 text-gray-300 hover:text-white transition"
       >
-        <ArrowLeft size={18} />
-        <span>Back to Home</span>
-      </button>
-
-      <motion.div
-        className="w-full max-w-md rounded-xl bg-surface-a10/20 border border-primary-a10/20 p-6 shadow-xl"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-      >
-        <div className="mb-6 h-2 w-full rounded-full bg-surface-a30/20">
-          <motion.div
-            className="h-full rounded-full bg-gradient-to-r from-primary-a0/60 to-primary-a50"
-            initial={{ width: "0%" }}
-            animate={{ width: `${(step / 3) * 100}%` }}
-            transition={{ duration: 0.4 }}
-          />
-        </div>
-
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-primary-a0 via-primary-a30 to-primary-a50 bg-clip-text text-transparent drop-shadow-lg mb-4 text-center">
-          Create Account
+        <ArrowLeft size={18} /> Back to Home
+      </div>
+      <div className="w-full max-w-md rounded-xl bg-surface-a0 p-8 shadow-xl border border-surface-a10">
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-primary-a0 via-primary-a30 to-primary-a50 bg-clip-text text-transparent drop-shadow-lg mb-2 text-center">
+          Welcome Back
         </h1>
+        <p className="text-sm text-gray-400 text-center mb-6">Sign in to your account to continue</p>
 
-        {error && <p className="text-red-400 text-sm text-center mb-2">{error}</p>}
+        {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
 
-        <div className="space-y-4">
-          {step === 1 && (
-            <motion.div>
-              <p className="text-sm text-gray-400 mb-1">Full Name</p>
-              <div className="relative">
-                <User className="absolute left-3 top-3 text-gray-500" size={18} />
-                <input
-                  ref={fullNameRef}
-                  type="text"
-                  name="fullName"
-                  autoComplete="name"
-                  className="w-full pl-10 pr-4 py-2 rounded-lg border border-primary-a20/60 bg-surface-a0 text-light-a0 focus:border-primary-a40 focus:outline-none"
-                  placeholder="John Doe"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  autoFocus
-                />
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-sm text-gray-400 mb-1">Email Address</label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-3 text-gray-500" size={18} />
+              <input
+                type="email"
+                name="email"
+                className="w-full pl-10 pr-4 py-2 rounded-lg border bg-surface-a20 text-light-a0 border-surface-a10 focus:border-primary-a50 focus:outline-none"
+                placeholder="name@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm text-gray-400 mb-1">Password</label>
+            <div className="relative">
+              <Lock className="absolute left-3 top-3 text-gray-500" size={18} />
+              <motion.input
+                ref={passwordInputRef}
+                type={showPassword ? "text" : "password"}
+                name="password"
+                className="w-full pl-10 pr-12 py-2 rounded-lg border bg-surface-a20 text-gray-400 border-surface-a10 focus:border-primary-a50 focus:outline-none"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+                required
+                style={{
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "#6d7280",
+                }}
+              />
+              <div
+                onClick={togglePasswordVisibility}
+                className="absolute right-3 top-3 cursor-pointer text-gray-500"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </div>
-            </motion.div>
-          )}
+            </div>
+          </div>
 
-          {step === 2 && (
-            <motion.div>
-              <p className="text-sm text-gray-400 mb-1">Email Address</p>
-              <div className="relative">
-                <Mail className="absolute left-3 top-3 text-gray-500" size={18} />
-                <input
-                  ref={emailRef}
-                  type="email"
-                  name="email"
-                  autoComplete="email"
-                  className="w-full pl-10 pr-4 py-2 rounded-lg border border-primary-a20/60 bg-surface-a0 text-light-a0 focus:border-primary-a40 focus:outline-none"
-                  placeholder="example@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  autoFocus
-                />
-              </div>
-            </motion.div>
-          )}
+          <div className="flex justify-between items-center text-sm text-gray-400 mb-6">
+            <label className="flex items-center gap-2">
+              <input type="checkbox" className="accent-primary-a50" defaultChecked /> Remember me?
+            </label>
+            <a href="/forgot-password" className="text-primary-a50 hover:underline">Forgot password?</a>
+          </div>
 
-          {step === 3 && (
-            <motion.div>
-              <p className="text-sm text-gray-400 mb-1">Password</p>
-              <div className="relative">
-                <Lock className="absolute left-3 top-3 text-gray-500" size={18} />
-                <input
-                  ref={passwordRef}
-                  type="password"
-                  name="password"
-                  autoComplete="new-password"
-                  className="w-full pl-10 pr-4 py-2 rounded-lg border border-primary-a20/60 bg-surface-a0 text-light-a0 focus:border-primary-a40 focus:outline-none"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  autoFocus
-                />
-              </div>
-            </motion.div>
-          )}
-        </div>
-
-        <motion.button
-          onClick={validateAndProceed}
-          className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-primary-a40/5 border border-primary-a10/80 py-2 text-light-a0 transition hover:bg-primary-a50/20"
-        >
-          {step < 3 ? <>Continue <ArrowRight size={18} /></> : "Create Account"}
-        </motion.button>
+          <motion.button
+            type="submit"
+            className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-primary-a40/5 border border-primary-a10/80 py-2 text-light-a0 transition hover:bg-primary-a50/20"
+          >
+            Sign In →
+          </motion.button>
+        </form>
 
         <div className="my-6 flex items-center gap-2">
-          <div className="h-[1px] flex-grow bg-gray-600" />
-          <p className="text-gray-400">or</p>
-          <div className="h-[1px] flex-grow bg-gray-600" />
+          <div className="h-[1px] flex-grow bg-surface-a30" />
+          <p className="text-gray-400">Or continue with</p>
+          <div className="h-[1px] flex-grow bg-surface-a30" />
         </div>
 
         <motion.button
-          onClick={() => console.log("github")}
+          onClick={() => console.log("GitHub login")}
           className="flex w-full items-center border border-primary-a10/60 justify-center gap-2 rounded-lg bg-surfaceTonal-a50/15 py-2 text-light-a0 transition hover:bg-surfaceTonal-a50/30"
         >
-          <Github size={18} /> Sign up with GitHub
+          <Github size={18} /> Continue with GitHub
         </motion.button>
 
         <p className="mt-6 text-center text-sm text-gray-400">
-          Already have an account?{" "}
-          <a href="/login" className="text-primary-a40 hover:text-primary-a50 font-medium">
-            Sign in
+          Don't have an account?{" "}
+          <a href="/sign-up" className="text-primary-a50 hover:underline hover:text-primary-a60">
+            Sign up
           </a>
         </p>
-      </motion.div>
+      </div>
     </div>
   );
 };
 
-export default SignUp;
+export default Login;
