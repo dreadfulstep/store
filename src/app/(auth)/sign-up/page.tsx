@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, User, Mail, Lock, ArrowLeft } from "lucide-react";
+import { ArrowRight, User, Mail, Lock, ArrowLeft, Github } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Button from "@/components/Button";
 import { Input } from "@/components/Input";
@@ -162,6 +162,29 @@ const SignUp = () => {
         >
           {step < 3 ? <>Continue <ArrowRight size={18} /></> : "Complete Sign Up"}
         </Button>
+        
+        <div className="my-6 flex items-center gap-2">
+          <div className="h-[1px] flex-grow bg-gray-600" />
+          <p className="text-gray-400">or</p>
+          <div className="h-[1px] flex-grow bg-gray-600" />
+        </div>
+
+        <Button
+          onClick={() => console.log("github")}
+          variant="secondary"
+          className="flex w-full items-center justify-center gap-2"
+        >
+          <Github size={18} /> Sign up with GitHub
+        </Button>
+
+        <div className="mt-6 text-center text-sm text-gray-400">
+          Already have an account?{" "}
+          <div className="w-full flex justify-center">
+            <Button variant="link" href="/login">
+              Sign in
+            </Button>
+          </div>
+        </div>
       </motion.div>
     </div>
   );
