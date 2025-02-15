@@ -41,12 +41,14 @@ const Login = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-surface-a0">
-      <div
-        className="absolute top-6 left-6 text-gray-400 hover:text-light-a0 cursor-pointer flex items-center gap-2"
+      <Button
         onClick={() => router.push("/")}
+        variant="link"
+        className="absolute top-6 left-6 flex items-center gap-2 !text-gray-300 hover:!text-white transition !no-underline"
       >
-        <ArrowLeft size={18} /> Back to Home
-      </div>
+        <ArrowLeft size={18} />
+        <span>Back to Home</span>
+      </Button>
       <div className="w-full max-w-md rounded-xl bg-surface-a0 p-8 shadow-xl border border-surface-a10">
         <h1 className="text-2xl font-bold bg-gradient-to-r from-primary-a0 via-primary-a30 to-primary-a50 bg-clip-text text-transparent drop-shadow-lg mb-2 text-center">
           Welcome Back
@@ -105,9 +107,10 @@ const Login = () => {
             <label className="flex items-center gap-2">
               <input type="checkbox" className="accent-primary-a50" defaultChecked /> Remember me?
             </label>
-            <a href="/forgot-password" className="text-primary-a50 hover:underline">Forgot password?</a>
+            <Button variant="link" href="/forgot-password">
+              Forgot password?
+            </Button>
           </div>
-
 
           <Button
             type="submit"
@@ -124,18 +127,19 @@ const Login = () => {
           <div className="h-[1px] flex-grow bg-surface-a30" />
         </div>
 
-        <motion.button
+        <Button
           onClick={() => console.log("GitHub login")}
-          className="flex w-full items-center border border-primary-a10/60 justify-center gap-2 rounded-lg bg-surfaceTonal-a50/15 py-2 text-light-a0 transition hover:bg-surfaceTonal-a50/30"
+          variant="secondary"
+          className="flex w-full items-center justify-center gap-2"
         >
           <Github size={18} /> Continue with GitHub
-        </motion.button>
+        </Button>
 
         <p className="mt-6 text-center text-sm text-gray-400">
           Don&apos;t have an account?{" "}
-          <a href="/sign-up" className="text-primary-a50 hover:underline hover:text-primary-a60">
+          <Button variant="link" href="/sign-up">
             Sign up
-          </a>
+          </Button>
         </p>
       </div>
     </div>

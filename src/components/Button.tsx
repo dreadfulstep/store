@@ -13,7 +13,7 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles =
-    "flex items-center justify-center gap-2 rounded-lg py-2 text-lg font-semibold transition";
+    "flex items-center justify-center gap-2 rounded-lg py-2 font-semibold transition";
   
   const variantStyles = {
     primary:
@@ -25,7 +25,7 @@ const Button: React.FC<ButtonProps> = ({
     outline:
       "border border-primary-a50 hover:bg-primary-a50/20 text-primary-a50",
     ghost:
-      "bg-transparent border-none text-light-a0 hover:bg-primary-a40/10",
+      "bg-transparent border-none hover:bg-primary-a40/10",
     danger:
       "bg-red-600 hover:bg-red-700 text-white border-none",
   };

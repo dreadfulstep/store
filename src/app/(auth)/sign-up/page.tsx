@@ -2,9 +2,9 @@
 
 import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { nanoid } from "nanoid";
 import { Github, ArrowRight, User, Mail, Lock, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Button from "@/components/Button";
 
 const SignUp = () => {
   const router = useRouter();
@@ -12,16 +12,11 @@ const SignUp = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
   const [error, setError] = useState("");
 
   const fullNameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-
-  const generateUsername = (name: string) => {
-    return name.toLowerCase().replace(/\s/g, "") + nanoid(4);
-  };
 
   const validateAndProceed = () => {
     setError("");
@@ -43,7 +38,6 @@ const SignUp = () => {
     }
 
     if (step === 1) {
-      setUsername(generateUsername(fullName));
       setStep(2);
       setTimeout(() => emailRef.current?.focus(), 50);
     } else if (step === 2) {
@@ -62,14 +56,14 @@ const SignUp = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-surface-a0 relative">
-      {/* Back to Home Button */}
-      <button
+      <Button
         onClick={() => router.push("/")}
-        className="absolute top-6 left-6 flex items-center gap-2 text-gray-300 hover:text-white transition"
+        variant="link"
+        className="absolute top-6 left-6 flex items-center gap-2 !text-gray-300 hover:!text-white transition !no-underline"
       >
         <ArrowLeft size={18} />
         <span>Back to Home</span>
-      </button>
+      </Button>
 
       <motion.div
         className="w-full max-w-md rounded-xl bg-surface-a10/20 border border-primary-a10/20 p-6 shadow-xl"
@@ -157,12 +151,13 @@ const SignUp = () => {
           )}
         </div>
 
-        <motion.button
+        <Button
           onClick={validateAndProceed}
-          className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-primary-a40/5 border border-primary-a10/80 py-2 text-light-a0 transition hover:bg-primary-a50/20"
+          variant="primary"
+          className="mt-4 w-full"
         >
           {step < 3 ? <>Continue <ArrowRight size={18} /></> : "Create Account"}
-        </motion.button>
+        </Button>
 
         <div className="my-6 flex items-center gap-2">
           <div className="h-[1px] flex-grow bg-gray-600" />
@@ -170,18 +165,19 @@ const SignUp = () => {
           <div className="h-[1px] flex-grow bg-gray-600" />
         </div>
 
-        <motion.button
+        <Button
           onClick={() => console.log("github")}
-          className="flex w-full items-center border border-primary-a10/60 justify-center gap-2 rounded-lg bg-surfaceTonal-a50/15 py-2 text-light-a0 transition hover:bg-surfaceTonal-a50/30"
+          variant="secondary"
+          className="flex w-full items-center justify-center gap-2"
         >
           <Github size={18} /> Sign up with GitHub
-        </motion.button>
+        </Button>
 
         <p className="mt-6 text-center text-sm text-gray-400">
           Already have an account?{" "}
-          <a href="/login" className="text-primary-a40 hover:text-primary-a50 font-medium">
+          <Button variant="link" href="/login">
             Sign in
-          </a>
+          </Button>
         </p>
       </motion.div>
     </div>
