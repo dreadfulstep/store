@@ -129,14 +129,14 @@ const Login = () => {
           <Github size={18} /> Continue with GitHub
         </Button>
 
-        <p className="mt-6 text-center text-sm text-gray-400">
+        <div className="mt-6 text-center text-sm text-gray-400">
           Don&apos;t have an account?{" "}
           <div className="w-full flex justify-center">
-            <Button variant="link" href="/login" >
+            <Button variant="link" href="/sign-up" >
               Sign up
             </Button>
           </div>
-        </p>
+        </div>
       </div>
     </div>
   );

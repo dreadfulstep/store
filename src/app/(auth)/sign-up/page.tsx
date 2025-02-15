@@ -2,11 +2,17 @@
 
 import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { Github, ArrowRight, User, Mail, Lock, ArrowLeft } from "lucide-react";
+import { ArrowRight, User, Mail, Lock, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Button from "@/components/Button";
 import { Input } from "@/components/Input";
-import Turnstile from "react-turnstile";
+import { z } from "zod";
+
+const signUpSchema = z.object({
+  fullName: z.string().min(1, { message: "Full name is required" }),
+  email: z.string().email({ message: "Invalid email address" }),
+  password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
+});
 
 const SignUp = () => {
   const router = useRouter();
@@ -15,8 +21,6 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [turnstileToken, setTurnstileToken] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false); // Control the modal visibility
 
   const fullNameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -25,19 +29,20 @@ const SignUp = () => {
   const validateAndProceed = () => {
     setError("");
 
-    if (step === 1 && !fullName.trim()) {
-      setError("Please enter your full name.");
-      fullNameRef.current?.focus();
-      return;
-    }
-    if (step === 2 && !email.trim()) {
-      setError("Please enter a valid email address.");
-      emailRef.current?.focus();
-      return;
-    }
-    if (step === 3 && password.length < 6) {
-      setError("Password must be at least 6 characters long.");
-      passwordRef.current?.focus();
+    const currentData = { fullName, email, password };
+    let validationSchema;
+    
+    if (step === 1) validationSchema = signUpSchema.pick({ fullName: true });
+    else if (step === 2) validationSchema = signUpSchema.pick({ email: true });
+    else if (step === 3) validationSchema = signUpSchema.pick({ password: true });
+
+    const result = validationSchema!.safeParse(currentData);
+
+    if (!result.success) {
+      setError(result.error.errors[0]?.message || "Invalid input");
+      if (step === 1) fullNameRef.current?.focus();
+      else if (step === 2) emailRef.current?.focus();
+      else if (step === 3) passwordRef.current?.focus();
       return;
     }
 
@@ -48,8 +53,9 @@ const SignUp = () => {
       setStep(3);
       setTimeout(() => passwordRef.current?.focus(), 50);
     } else if (step === 3) {
-      // Open the modal to show the CAPTCHA
-      setIsModalOpen(true);
+      localStorage.setItem("userData", JSON.stringify({ fullName, email, password }));
+      alert("Sign-up details saved to local storage!");
+      router.push("/login");
     }
   };
 
@@ -59,38 +65,6 @@ const SignUp = () => {
     } else if (e.shiftKey && e.key === "Enter") {
       if (step > 1) setStep((prev) => prev - 1);
     }
-  };
-
-  const handleSubmit = async () => {
-    if (!turnstileToken) {
-      setError("Please complete the security check.");
-      return;
-    }
-
-    const res = await fetch("/api/account/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fullName,
-        email,
-        password,
-        turnstileToken,
-      }),
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      router.push("/login");
-    } else {
-      setError(data.message || "Account creation failed.");
-    }
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false); // Close the modal after CAPTCHA is completed
   };
 
   return (
@@ -188,46 +162,7 @@ const SignUp = () => {
         >
           {step < 3 ? <>Continue <ArrowRight size={18} /></> : "Complete Sign Up"}
         </Button>
-
-        <div className="my-6 flex items-center gap-2">
-          <div className="h-[1px] flex-grow bg-gray-600" />
-          <p className="text-gray-400">or</p>
-          <div className="h-[1px] flex-grow bg-gray-600" />
-        </div>
-
-        <Button
-          onClick={() => console.log("github")}
-          variant="secondary"
-          className="flex w-full items-center justify-center gap-2"
-        >
-          <Github size={18} /> Sign up with GitHub
-        </Button>
-
-        <div className="mt-6 text-center text-sm text-gray-400">
-          Already have an account?{" "}
-          <div className="w-full flex justify-center">
-            <Button variant="link" href="/login">
-              Sign in
-            </Button>
-          </div>
-        </div>
       </motion.div>
-
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
-          <div className="bg-surface-a0 border border-primary-a0/60 p-6 rounded-lg w-96 max-w-full">
-            <h2 className="text-xl font-semibold mb-4">Please Complete the CAPTCHA</h2>
-            <Turnstile
-              sitekey={process.env.NEXT_PUBLIC_CLOUDFLARE_SITE_KEY!}
-              onVerify={(token) => {
-                setTurnstileToken(token);
-                handleSubmit();
-                closeModal();
-              }}
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 };
