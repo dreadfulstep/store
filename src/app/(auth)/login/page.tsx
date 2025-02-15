@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Mail, Lock, ArrowLeft, Github, Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import Button from "@/components/Button";
 
 const Login = () => {
   const router = useRouter();
@@ -13,7 +14,6 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const passwordInputRef = useRef<HTMLInputElement>(null);
 
-  // Handle submit
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim() || !password.trim()) {
@@ -23,12 +23,10 @@ const Login = () => {
     console.log("Logging in with:", { email, password });
   };
 
-  // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  // Check for autofill and update the state accordingly
   useEffect(() => {
     const checkAutoFill = () => {
       if (passwordInputRef.current?.value) {
@@ -36,7 +34,6 @@ const Login = () => {
       }
     };
 
-    // Set a small timeout to check if autofill happens after render
     const timer = setTimeout(checkAutoFill, 500);
     
     return () => clearTimeout(timer);
@@ -111,12 +108,14 @@ const Login = () => {
             <a href="/forgot-password" className="text-primary-a50 hover:underline">Forgot password?</a>
           </div>
 
-          <motion.button
+
+          <Button
             type="submit"
-            className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-primary-a40/5 border border-primary-a10/80 py-2 text-light-a0 transition hover:bg-primary-a50/20"
+            variant="primary"
+            className="mt-4 w-full"
           >
             Sign In →
-          </motion.button>
+          </Button>
         </form>
 
         <div className="my-6 flex items-center gap-2">
@@ -133,7 +132,7 @@ const Login = () => {
         </motion.button>
 
         <p className="mt-6 text-center text-sm text-gray-400">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <a href="/sign-up" className="text-primary-a50 hover:underline hover:text-primary-a60">
             Sign up
           </a>
