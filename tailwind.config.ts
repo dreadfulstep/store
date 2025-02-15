@@ -19,32 +19,32 @@ export default {
 
         /** Primary colors */
         primary: {
-          a0: 'hsl(var(--primary-a0))',
-          a10: 'hsl(var(--primary-a10))',
-          a20: 'hsl(var(--primary-a20))',
-          a30: 'hsl(var(--primary-a30))',
-          a40: 'hsl(var(--primary-a40))',
-          a50: 'hsl(var(--primary-a50))',
+          a0: 'rgba(var(--primary-a0))',
+          a10: 'rgba(var(--primary-a10))',
+          a20: 'rgba(var(--primary-a20))',
+          a30: 'rgba(var(--primary-a30))',
+          a40: 'rgba(var(--primary-a40))',
+          a50: 'rgba(var(--primary-a50))',
         },
 
         /** Surface colors */
         surface: {
-          a0: 'hsl(var(--surface-a0))',
-          a10: 'hsl(var(--surface-a10))',
-          a20: 'hsl(var(--surface-a20))',
-          a30: 'hsl(var(--surface-a30))',
-          a40: 'hsl(var(--surface-a40))',
-          a50: 'hsl(var(--surface-a50))',
+          a0: 'rgba(var(--surface-a0))',
+          a10: 'rgba(var(--surface-a10))',
+          a20: 'rgbahsl(var(--surface-a20))',
+          a30: 'rgba(var(--surface-a30))',
+          a40: 'rgba(var(--surface-a40))',
+          a50: 'rgbahsl(var(--surface-a50))',
         },
 
         /** Tonal surface colors */
         surfaceTonal: {
-          a0: 'hsl(var(--surface-tonal-a0))',
-          a10: 'hsl(var(--surface-tonal-a10))',
-          a20: 'hsl(var(--surface-tonal-a20))',
-          a30: 'hsl(var(--surface-tonal-a30))',
-          a40: 'hsl(var(--surface-tonal-a40))',
-          a50: 'hsl(var(--surface-tonal-a50))',
+          a0: 'rgba(var(--surface-tonal-a0))',
+          a10: 'rgba(var(--surface-tonal-a10))',
+          a20: 'rgba(var(--surface-tonal-a20))',
+          a30: 'rgba(var(--surface-tonal-a30))',
+          a40: 'rgba(var(--surface-tonal-a40))',
+          a50: 'rgba(var(--surface-tonal-a50))',
         },
       },
     },
