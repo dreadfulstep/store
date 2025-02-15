@@ -3,8 +3,33 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /** Base colors */
+  --dark-a0: 0, 0%, 0%; /* hsl(0, 0%, 0%) */
+  --light-a0: 0, 0%, 100%; /* hsl(0, 0%, 100%) */
+
+  /** Dark theme primary colors */
+  --primary-a0: 162, 43%, 61%; /* hsl(162, 43%, 61%) */
+  --primary-a10: 162, 39%, 64%; /* hsl(162, 39%, 64%) */
+  --primary-a20: 162, 36%, 67%; /* hsl(162, 36%, 67%) */
+  --primary-a30: 162, 33%, 70%; /* hsl(162, 33%, 70%) */
+  --primary-a40: 162, 30%, 73%; /* hsl(162, 30%, 73%) */
+  --primary-a50: 162, 27%, 76%; /* hsl(162, 27%, 76%) */
+
+  /** Dark theme surface colors */
+  --surface-a0: 0, 0%, 7%; /* hsl(0, 0%, 7%) */
+  --surface-a10: 0, 0%, 16%; /* hsl(0, 0%, 16%) */
+  --surface-a20: 0, 0%, 25%; /* hsl(0, 0%, 25%) */
+  --surface-a30: 0, 0%, 34%; /* hsl(0, 0%, 34%) */
+  --surface-a40: 0, 0%, 44%; /* hsl(0, 0%, 44%) */
+  --surface-a50: 0, 0%, 55%; /* hsl(0, 0%, 55%) */
+
+  /** Dark theme tonal surface colors */
+  --surface-tonal-a0: 162, 10%, 12%; /* hsl(162, 10%, 12%) */
+  --surface-tonal-a10: 162, 9%, 20%; /* hsl(162, 9%, 20%) */
+  --surface-tonal-a20: 162, 8%, 28%; /* hsl(162, 8%, 28%) */
+  --surface-tonal-a30: 162, 7%, 37%; /* hsl(162, 7%, 37%) */
+  --surface-tonal-a40: 162, 6%, 46%; /* hsl(162, 6%, 46%) */
+  --surface-tonal-a50: 162, 5%, 56%; /* hsl(162, 5%, 56%) */
 }
 
 @media (prefers-color-scheme: dark) {
